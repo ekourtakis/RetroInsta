@@ -1,147 +1,222 @@
 .post {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 20px;
-  background-color: #fff;
-  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  background-color: white;
 }
 
 .post-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  position: relative; 
+  gap: 0.75rem;
+  padding-right: 3rem; 
 }
+
 
 .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover; 
+  flex-shrink: 0;
+}
+
+.avatar-placeholder { 
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #aaa;
+  flex-shrink: 0;
 }
 
 .username {
   font-weight: bold;
+  color: black; 
 }
 
 .post-image {
   width: 100%;
-  max-height: 400px;
+  display: block; 
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 10px;
+  background-color: #f0f0f0; 
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  color: #aaa;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 24px;
 }
 
 .post-content {
-  padding: 10px 0;
+  padding: 5px 5px 10px 5px; 
+}
+
+.post-description { 
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .post-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   padding: 8px 0;
+  border-top: 1px solid #eee;
+  margin-top: 10px;
 }
 
-/* Like Button */
 .like-section {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 .like-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 22px;
+  padding: 0;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: transform 0.1s ease;
 }
 
 .like-count {
-  font-size: 16px;
-}
-
-
-.like-button:hover {
-  color: red;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
 }
 
 .like-button:active {
   transform: scale(0.9);
 }
 
-.liked {
+.like-button.liked {
   color: red;
 }
+.like-button:not(.liked) {
+  color: #555;
+}
+.like-button:not(.liked):hover {
+  color: #000;
+}
 
-/* Comment Section */
 .comment-section {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.comment-icon {
+  font-size: 22px;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.comment-icon:hover {
+  color: #000;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #888;
+  margin-left: auto;
+  padding-left: 10px;
+  white-space: nowrap;
 }
 
 .comments-list {
   display: flex;
   flex-direction: column;
-  gap: 10px; 
+  gap: 10px;
   text-align: left;
+  padding: 5px 0;
+}
+
+.comment {
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 .comment-author {
   font-weight: bold;
-}
-
-.comment-icon {
-  cursor: pointer;
-  font-size: 18px;
-  transition: all 0.2s ease;
-}
-
-.comment-icon:hover {
-  color: blue;
+  margin-right: 5px;
 }
 
 .comment-input {
   flex-grow: 1;
-  padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border: 1px solid #dbdbdb;
+  border-radius: 18px;
   font-size: 14px;
   outline: none;
+  background-color: #fafafa;
+}
+.comment-input:focus {
+  border-color: #a8a8a8;
+  background-color: #fff;
 }
 
 .comment-submit {
-  padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 8px;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  background-color: #007bff; /* Primary button color */
-  color: white; /* White text */
+  background-color: #0095f6;
+  color: white;
+  flex-shrink: 0;
 }
 
-.comment-submit:hover {
-  background-color: #0056b3; /* Darker shade on hover */
+.comment-submit:hover:not(:disabled) {
+  background-color: #0077cc;
+}
+.comment-submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.comment-submit:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
-.comment-submit:active {
-  transform: scale(0.95);
+/* --- Post modal box realigning for Mobile Devices --- */
+@media (max-width: 600px) {
+  .modal-box {
+    margin-left: 60px;
+    align-items: center;
+  }
 }
 
-/* Time */
-
-.timestamp {
-  position: absolute;
-  right: 10px;
-  font-size: 12px;
-  color: #888;
-}
+/* --- Modal Styles from File 2 --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -159,37 +234,38 @@
   position: relative;
   width: 90%;
   max-width: 600px;
-  height: 90%;
+  max-height: 90vh;
   overflow: hidden;
   border-radius: 12px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-full-image {
   width: 100%;
-  height: 100%;
+  max-height: 70vh;
   object-fit: contain;
-  background-color: white; 
+  background-color: #fff;
   display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
+  flex-shrink: 0;
 }
 
-
 .modal-comments-overlay {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   background: white;
-  z-index: 2;
   padding: 12px;
   box-sizing: border-box;
   border-top: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 100px;
+  max-height: 30vh;
 }
 
 .modal-comments-scroll {
-  max-height: 150px;
+  flex-grow: 1;
   overflow-y: auto;
   margin-bottom: 10px;
 }
@@ -197,37 +273,34 @@
 .modal-comment-input-row {
   display: flex;
   gap: 8px;
-}
-
-.comment-input {
-  flex: 1;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.comment-submit {
-  padding: 8px 12px;
-  background-color: #0095f6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background-color: #007bff; /* Primary button color */
-  color: white; /* White text */
-}
-
-.comment-submit:hover {
-  background-color: #0056b3; /* Darker shade on hover */
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 12px;
-  background: transparent;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.4);
   border: none;
-  font-size: 20px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
   color: white;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  line-height: 1;
+}
+.close-button:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.username-follow-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }

@@ -1,36 +1,33 @@
 import './Navbar.css';
-import GoogleLoginButton from '../GoogleLoginButton/GoogleLoginButton'; // Adjust path
-import { CredentialResponse } from '@react-oauth/google';
-import { GoogleIdTokenPayload } from '../../models/GoogleIdTokenPayload';
+import GoogleLoginButton from '../GoogleLoginButton/GoogleLoginButton';
 import { User } from '../../models/User';
+import { Link } from 'react-router-dom';
 
 interface NavbarProps {
   user: User | null;
   authLoading: boolean;
-  onLoginSuccess: (decodedToken: GoogleIdTokenPayload, credentialResponse: CredentialResponse) => void;
+  onLoginSuccess: (idToken: string) => void;
   onLoginError: () => void;
   onLogout: () => void;
-  onToggleCreatePostForm: () => void;
 }
 
 export default function Navbar({
   user,
-  authLoading,
   onLoginSuccess,
   onLoginError,
   onLogout,
-  onToggleCreatePostForm,
-}: NavbarProps 
-) {
+}: NavbarProps) {
   return (
-  <nav className="navbar">
+    <nav className="navbar">
       <div className="navbar-logo">
-        <img 
-          src="/insta.png" 
-          alt="RetroInsta logo" 
-          style={{ height: '40px', marginRight: '8px', verticalAlign: 'middle' }} 
-        />
-        RetroInsta
+        <Link to="/explore" className="navbar-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <img 
+            src="/insta.png" 
+            alt="RetroInsta logo" 
+            style={{ height: '40px', marginRight: '8px', verticalAlign: 'middle' }} 
+          />
+          RetroInsta
+        </Link>
       </div>
       <ul className="navbar-links">
         { user ? (
@@ -39,14 +36,6 @@ export default function Navbar({
             {/* Make username a list item */}
             <li className="navbar-item">
               <span className="user-greeting">{user?.username}</span>
-            </li>
-            <li className="navbar-item"> {/* Item for Make Post button */}
-              <button
-                onClick={onToggleCreatePostForm}
-                className="navbar-button make-post-button"
-              >
-                Make a Post
-              </button>
             </li>
             {/* Remove the extra div around the logout button */}
             <li className="navbar-item"> {/* Item for Logout button */}

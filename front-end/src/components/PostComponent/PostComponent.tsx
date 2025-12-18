@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "./PostComponent.css";
-import { DisplayPost, AddCommentPayload, Comment } from "../../models/Post";
-import { followUser } from '../../api/users';
+import { DisplayPost } from "../../models/Post";
 import { User } from "../../models/User";
 import { toggleLikePost } from "../../api/posts";
 import CommentSection from "../CommentSection/CommentSection";
@@ -9,34 +8,38 @@ import CommentSection from "../CommentSection/CommentSection";
 interface PostComponentProps {
   post: DisplayPost;
   appUser: User | null;
-  userCache?:React.MutableRefObject<Record<string, User>>;
+  userCache?: React.MutableRefObject<Record<string, User>>;
+  onUserUpdate?: () => void;
 }
 
-const PostComponent: React.FC<PostComponentProps> = ({ post, appUser, userCache }) => {
+const PostComponent: React.FC<PostComponentProps> = ({
+  post,
+  appUser,
+  userCache,
+  onUserUpdate
+}) => {
+
   const { author, imagePath, description, likes: initialLikes, createdAt } = post;
   const username = author?.username || "Unknown User";
   const profilePicPath = author?.profilePicPath;
-  const currentUser = appUser;
-  const currentUserId = appUser?._id || "notLoggedIn";
 
   const [likes, setLikes] = useState(initialLikes);
   const [isLiked, setIsLiked] = useState(
-    currentUser?.likedPostIDs.includes(post._id) // initally set to whether user has liked post before
+    appUser?.likedPostIDs.includes(post._id)
   );
 
-  // Format the timestamp
   const timestamp = createdAt
-      ? new Date(createdAt).toLocaleString() // Simple formatting
-      : 'Timestamp unavailable';
+    ? new Date(createdAt).toLocaleString()
+    : 'Timestamp unavailable';
 
   const handleLike = async () => {
-    if (!currentUser) {
+    if (!appUser) {
       alert("You must be logged in to like a post, stupid.");
       return;
     }
 
     try {
-      await toggleLikePost(post._id, currentUser._id);
+      await toggleLikePost(post._id, appUser._id);
       setLikes((prevLikes) => (isLiked ? prevLikes - 1 : prevLikes + 1));
       setIsLiked(!isLiked);
       console.log("User liked/unliked post.");
@@ -46,40 +49,22 @@ const PostComponent: React.FC<PostComponentProps> = ({ post, appUser, userCache 
     }
   };
 
-  const handleFollowClick = async () => {
-    console.log("currentUserId:", currentUserId);
-    try {
-      await followUser(currentUserId, author._id);
-      console.log(`Followed ${author._id}`);
-    } catch (error) {
-      console.error("Follow action failed:", error);
-    }
-  };
-
   return (
     <div className="post">
       <div className="post-header">
-        {profilePicPath ? (
+        <a href={`/profile/${author?._id}`} className="avatar-link">
+          {profilePicPath ? (
             <img className="avatar" src={profilePicPath} alt={`${username}'s avatar`} />
           ) : (
-            <div className="avatar-placeholder">👤</div> // Placeholder if no pic
+            <div className="avatar-placeholder">👤</div>
           )}
-          <span className="username">{username}</span>
-          <button
-            onClick={handleFollowClick}
-            style={{
-              marginLeft: "auto",
-              backgroundColor: "black",
-              color: "white",
-              border: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "1rem",
-            }}
-          >
-            Follow
-          </button>
+        </a>
+
+        <a href={`/profile/${author?._id}`} className="username">
+          {username}
+        </a>
+
+        
       </div>
 
       {imagePath ? (
@@ -91,7 +76,6 @@ const PostComponent: React.FC<PostComponentProps> = ({ post, appUser, userCache 
       <div className="post-content">
         <p className="post-description">{description || ''}</p>
 
-        {/* Like & Comment Bar */}
         <div className="post-actions">
           <div className="like-section">
             <button
@@ -104,17 +88,14 @@ const PostComponent: React.FC<PostComponentProps> = ({ post, appUser, userCache 
             <span className="like-count">{likes}</span>
           </div>
 
-          {/* Comment section */}
-          {currentUser && (
-            <CommentSection
-              postID={post._id}
-              currentUser={currentUser}
-              userCache={userCache || { current: {} }} // Provide a default empty cache
-              imagePath={imagePath}
-            />
-          )}
+          <CommentSection
+            postID={post._id}
+            currentUser={appUser}
+            userCache={userCache || { current: {} }}
+            imagePath={imagePath}
+          />
+          <div className="timestamp">{timestamp}</div>
         </div>
-        <div className="timestamp">{timestamp}</div>
       </div>
     </div>
   );
